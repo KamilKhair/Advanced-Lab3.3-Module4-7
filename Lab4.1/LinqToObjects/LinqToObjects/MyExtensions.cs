@@ -15,7 +15,7 @@ namespace LinqToObjects
                 .Select(type => new { SourceProperty = type.property1, DestinationProperty = type.property2 });
             foreach (var property in properties)
             {
-                property.DestinationProperty.SetValue(destination, property.SourceProperty.GetValue(source, null), null);
+                property.DestinationProperty.SetValue(destination, property.SourceProperty.GetValue(source));
             }
         }
     }
