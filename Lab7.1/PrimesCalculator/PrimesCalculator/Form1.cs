@@ -45,7 +45,7 @@ namespace PrimesCalculator
                 return;
             }
             var isPrime = true;
-            for (var j = 2; j < i; ++j)
+            for (var j = 2; j <= Math.Sqrt(i); ++j)
             {
                 if (i % j != 0) continue;
                 isPrime = false;
