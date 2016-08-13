@@ -81,6 +81,7 @@ namespace BackgroundPrimeCalc
         private void cancelButton_Click(object sender, EventArgs e)
         {
             backgroundWorker1.CancelAsync();
+            MessageBox.Show(@"Operation Cancelled!");
             ClearListBox();
         }
 
@@ -97,7 +98,10 @@ namespace BackgroundPrimeCalc
 
         private void backgroundWorker1_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
         {
-            MessageBox.Show(progressBar1.Value != progressBar1.Maximum ? @"Operation Canceleld!" : @"Operation Completed!");
+            if (progressBar1.Value == progressBar1.Maximum)
+            {
+                MessageBox.Show(@"Operation Completed!");
+            }
             progressBar1.Value = 0;
             _working = false;
         }
