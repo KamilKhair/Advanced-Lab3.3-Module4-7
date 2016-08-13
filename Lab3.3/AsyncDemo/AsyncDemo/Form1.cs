@@ -1,25 +1,20 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace AsyncDemo
 {
     public partial class Form1 : Form
     {
+        private static bool _working;
         public Form1()
         {
             InitializeComponent();
         }
 
-        private IEnumerable<int> CalcPrimes(int first, int last)
+        private static IEnumerable<int> CalcPrimes(int first, int last)
         {
+            _working = true;
             var list = new List<int>();
             var size = 0;
             for (var i = first; i <= last; ++i)
@@ -31,10 +26,14 @@ namespace AsyncDemo
             return result;
         }
 
-        private static void FindPrime(int i, List<int> list, ref int size)
+        private static void FindPrime(int i, ICollection<int> list, ref int size)
         {
+            if (i < 2)
+            {
+                return;
+            }
             var isPrime = true;
-            for (var j = 2; j < i; ++j)
+            for (var j = 2; j <= Math.Sqrt(i); ++j)
             {
                 if (i%j != 0) continue;
                 isPrime = false;
@@ -48,11 +47,17 @@ namespace AsyncDemo
         private void calculateButton_Click(object sender, EventArgs e)
         {
             ClearListBox();
-            int first;
-            int last;
-            if (!ValidateInput(out first, out last)) return;
+            if (!ValidateInput())
+            {
+                return;
+            }
+            if (_working)
+            {
+                MessageBox.Show(@"Working, Please wait");
+                return;
+            }
             var calcPrimesDelegate = new CalcPrimesDelegate(CalcPrimes);
-            calcPrimesDelegate.BeginInvoke(first, last, iar =>
+            calcPrimesDelegate.BeginInvoke(int.Parse(firstTextBox.Text), int.Parse(lastTextBox.Text), iar =>
             {
                 EndInvokeCalcPrimes(calcPrimesDelegate, iar);
             }, null);
@@ -61,18 +66,20 @@ namespace AsyncDemo
         private void EndInvokeCalcPrimes(CalcPrimesDelegate calcPrimesDelegate, IAsyncResult iar)
         {
             var primes = calcPrimesDelegate.EndInvoke(iar);
-            BeginInvoke(new Action(() =>
+            resultListBox.Invoke(new Action(() =>
             {
                 foreach (var prime in primes)
                     resultListBox.Items.Add(prime);
+                _working = false;
             }));
         }
 
-        private bool ValidateInput(out int first, out int last)
+        private bool ValidateInput()
         {
-            last = 0;
+            int first;
+            var last = 0;
             var validInput = int.TryParse(firstTextBox.Text, out first) && int.TryParse(lastTextBox.Text, out last);
-            if (validInput && first >= 2 && first <= last)
+            if (validInput && first <= last)
             {
                 return true;
             }
