@@ -6,6 +6,7 @@ namespace AsyncDemo
 {
     public partial class Form1 : Form
     {
+        // Why STATIC ??
         private static bool _working;
         public Form1()
         {
@@ -25,7 +26,8 @@ namespace AsyncDemo
             list.CopyTo(result);
             return result;
         }
-
+        // Why static?? 
+        // Don't use ref parameter, you can make function that return "int"
         private static void FindPrime(int i, ICollection<int> list, ref int size)
         {
             if (i < 2)
@@ -57,15 +59,18 @@ namespace AsyncDemo
                 return;
             }
             var calcPrimesDelegate = new CalcPrimesDelegate(CalcPrimes);
+            // use TryParse next time
             calcPrimesDelegate.BeginInvoke(int.Parse(firstTextBox.Text), int.Parse(lastTextBox.Text), iar =>
             {
                 EndInvokeCalcPrimes(calcPrimesDelegate, iar);
             }, null);
         }
-
+        //Bad name for the method
         private void EndInvokeCalcPrimes(CalcPrimesDelegate calcPrimesDelegate, IAsyncResult iar)
         {
             var primes = calcPrimesDelegate.EndInvoke(iar);
+            // Invoke = is synchronic , beginInvoke = Asynchronic
+            // The UI blocked while calculating primes
             resultListBox.Invoke(new Action(() =>
             {
                 foreach (var prime in primes)
