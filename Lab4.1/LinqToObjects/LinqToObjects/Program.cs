@@ -31,7 +31,8 @@ namespace LinqToObjects
 
         private static IEnumerable<object> GetInterfacesOrderedByName()
         {
-
+            // Why did't you use: From .... in ...... syntex ???
+            // Why @ everywhere..??
             var interfaces = Assembly.GetAssembly(typeof(int))
                 .GetTypes()
                 .Where(@interface => @interface.IsInterface && @interface.IsPublic)
@@ -43,6 +44,7 @@ namespace LinqToObjects
         private static void Exercise1B()
         {
             Console.WriteLine("Exercise 1.b:");
+            // Why did't you use: From .... in ...... syntex ???
             var processes = Process.GetProcesses()
                 .Where(process => process.Threads.Count < 5 && CanAccessProcess(process))
                 .OrderBy(process => process.Id)
@@ -69,6 +71,7 @@ namespace LinqToObjects
         private static void Exercise1C()
         {
             Console.WriteLine("Exercise 1.c:");
+            // Why did't you use: From .... in ...... syntex ???
             var processes = Process.GetProcesses()
                 .Where(process => process.Threads.Count < 5 && CanAccessProcess(process))
                 .OrderBy(process => process.Id)
@@ -88,6 +91,8 @@ namespace LinqToObjects
         private static void Exercise1D()
         {
             Console.WriteLine("Exercise 1.d:");
+            // Process.GetProcesses().Sum(p => p.Threads.Count) should be in different method
+            //In Console.WriteLine pass just the number you got from the method
             Console.WriteLine($"The total number of threads in the system is: {Process.GetProcesses().Sum(p => p.Threads.Count)}");
             Console.WriteLine();
         }
