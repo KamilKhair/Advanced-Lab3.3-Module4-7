@@ -82,7 +82,7 @@ namespace XLinq
             Console.WriteLine();
 
             var xElements = classes as IList<XElement> ?? classes.ToList();
-            // next time make your calculations out of prints
+            // next time make your calculations out of prints 
             Console.WriteLine($"Total number of properties: {xElements.Sum(e => e.Descendants("Property").Count())}");
             var parameters = xElements.Descendants("Parameter")
                 .GroupBy(parameter => (string) parameter.Attribute("Type"))
