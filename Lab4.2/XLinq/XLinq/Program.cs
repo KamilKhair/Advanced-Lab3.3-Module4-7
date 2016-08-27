@@ -22,10 +22,12 @@ namespace XLinq
 
         private static IEnumerable<XElement> GetXElementOfClasses()
         {
+
+            // Why did't you use: From .... in ...... syntex ???
             var classes = Assembly.GetAssembly(typeof(string)).GetTypes()
                 .Where(type => type.IsClass && type.IsPublic)
                 .Select(@class => new XElement("Type", new XAttribute("FullName", @class.FullName),
-                    new XElement("Properties", @class.GetProperties().Select(prop =>
+                    new XElement("Properties", @class.GetProperties().Select(prop => //should be @class.GetProperties(BindingFlags.Public | BindingFlags.Instance)
                         new XElement("Property", new XAttribute("Name", prop.Name),
                             new XAttribute("Type", prop.PropertyType)))),
                     new XElement("Methods",
@@ -47,9 +49,11 @@ namespace XLinq
 
             var noProperties = classes.Where(@class =>
             {
+                //use: From .... in ...... syntex next time
                 var xElement = @class.Element("Properties");
                 return xElement != null && !xElement.Descendants().Any();
             })
+            // you can skip first "select" and go straight to "order"
                 .Select(@class => new {@class, name = (string) @class.Attribute("FullName")})
                 .OrderBy(type => type.name)
                 .Select(type => type.name);
@@ -78,6 +82,7 @@ namespace XLinq
             Console.WriteLine();
 
             var xElements = classes as IList<XElement> ?? classes.ToList();
+            // next time make your calculations out of prints
             Console.WriteLine($"Total number of properties: {xElements.Sum(e => e.Descendants("Property").Count())}");
             var parameters = xElements.Descendants("Parameter")
                 .GroupBy(parameter => (string) parameter.Attribute("Type"))
@@ -92,7 +97,7 @@ namespace XLinq
             Console.WriteLine();
             Console.WriteLine("Exercise 3.d: Check out \"Exercise3D.xml\" file in bin\\debug directory.");
             Console.WriteLine();
-
+            // "select" should be the last one, first of all you should filter your query and in the end select your choices
             var myTypes = xElements.Select( type =>
                                     new
                                     {
@@ -115,7 +120,7 @@ namespace XLinq
             Console.WriteLine();
             Console.WriteLine("Exercise 3.e: Check out \"Exercise3E.txt\" file in bin\\debug directory.");
             Console.WriteLine();
-
+            // "select" should be the last one, first of all you should filter your query and in the end select your choices
             var typesByNumOfMethods = xElements.Select(type => new { type, methods = type.Descendants("Method").Count()})
                 .OrderBy(t => (string) t.type.Attribute("FullName"))
                 .GroupBy(group => group.methods, group => new
