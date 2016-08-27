@@ -78,7 +78,7 @@ namespace XLinq
         private static void Exercise3C(IEnumerable<XElement> classes)
         {
             Console.WriteLine();
-            Console.WriteLine("Exercise 3.c: ");
+            Console.WriteLine("Exercise 3.c: "); 
             Console.WriteLine();
 
             var xElements = classes as IList<XElement> ?? classes.ToList();
