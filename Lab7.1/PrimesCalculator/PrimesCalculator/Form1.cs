@@ -4,6 +4,7 @@ using System.Windows.Forms;
 
 namespace PrimesCalculator
 {
+    //Nice
     public partial class Form1 : Form
     {
         private bool _working;

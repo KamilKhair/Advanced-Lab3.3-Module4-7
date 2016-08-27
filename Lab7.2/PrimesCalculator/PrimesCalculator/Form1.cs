@@ -58,6 +58,9 @@ namespace PrimesCalculator
                 break;
             }
             if (!isPrime) return;
+
+
+            //It isn't a good idea to update UI from a logical opeartion such as 'FindPrime;
             resultListBox.Invoke((MethodInvoker)delegate {
                 resultListBox.Items.Add(i);
             });
