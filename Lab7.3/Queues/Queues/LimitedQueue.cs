@@ -4,6 +4,7 @@ using System.Threading;
 
 namespace Queues
 {
+    //No IDisposable to release the semaphore?
     public class LimitedQueue<T>
     {
         private readonly Queue<T> _queue;
@@ -36,6 +37,8 @@ namespace Queues
             {
                 throw new InvalidOperationException("The queue is empty");
             }
+
+            //You should insert it into a finaly clause when working with acquire-release pattern
             _semaphore.Release();
             T element;
             lock (_syncLock)
